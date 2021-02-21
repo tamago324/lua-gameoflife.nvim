@@ -1,0 +1,97 @@
+*lua-gameoflife.nvim*
+
+
+==============================================================================
+INTRODUCTION                                *lua-gameoflife.nvim-introduction*
+
+TODO
+
+
+==============================================================================
+REQUIREMENTS                                *lua-gameoflife.nvim-requirements*
+
+* Neovim
+
+
+==============================================================================
+INTERFACE                                      *lua-gameoflife.nvim-interface*
+
+
+------------------------------------------------------------------------------
+COMMANDS                                       *lua-gameoflife.nvim-functions*
+
+GameOfLifeStart[!]                                          *:GameOfLifeStart*
+    Set up GameOfLife.
+    [!] is used to load a random board.
+
+
+GameOfLifeLoadPattern {url}                           *:GameOfLifeLoadPattern*
+    Load the pattern of {url} into the board.
+
+    Examples: >
+        :GameOfLifeLoadPattern https://www.conwaylife.com/patterns/p144gun.rle
+<
+
+    Note: See https://www.conwaylife.com/wiki/Category:Patterns
+
+
+GameOfLifeTimerSetStepPerSec {step_per_sec}    *:GameOfLifeTimerSetStepPerSec*
+    Set it to advance {step_per_sec} number of steps per second.
+
+    Default value: `10`
+
+
+------------------------------------------------------------------------------
+MAPPINGS                                        *lua-gameoflife.nvim-mappings*
+
+<Plug>(gameoflife-next)                              *<Plug>(gameoflife-next)*
+    Moving on to the next generation.
+
+<Plug>(gameoflife-prev)                              *<Plug>(gameoflife-prev)*
+    Moving on to the previous generation.
+
+<Plug>(gameoflife-spped-up)                      *<Plug>(gameoflife-spped-up)*
+    Increases the number of steps to move per second by 1.
+
+<Plug>(gameoflife-spped-down)                  *<Plug>(gameoflife-spped-down)*
+    Decreases the number of steps to move per second by 1.
+
+<Plug>(gameoflife-timer-start)                *<Plug>(gameoflife-timer-start)*
+    Start the timer.
+
+<Plug>(gameoflife-timer-pause)                *<Plug>(gameoflife-timer-pause)*
+    Pause the timer.
+
+<Plug>(gameoflife-timer-toggle)              *<Plug>(gameoflife-timer-toggle)*
+    Toggles between Start and Pause.
+
+<Plug>(gameoflife-load-random-board)    *<Plug>(gameoflife-load-random-board)*
+    Load a random board.
+
+<Plug>(gameoflife-load-pattern)              *<Plug>(gameoflife-load-pattern)*
+    Type `:GameOfLifeLoadPattern ` .
+
+
+Default mappings:                               *gameoflife-default-mappings*
+>
+    map <buffer> <Left>  <Plug>(gameoflife-next)
+    map <buffer> <Right> <Plug>(gameoflife-prev)
+    map <buffer> <Up>    <Plug>(gameoflife-spped-up)
+    map <buffer> <Down>  <Plug>(gameoflife-spped-down)
+    map <buffer> S       <Plug>(gameoflife-timer-start)
+    map <buffer> P       <Plug>(gameoflife-timer-pause)
+    map <buffer> T       <Plug>(gameoflife-timer-toggle)
+    map <buffer> R       <Plug>(gameoflife-load-random-board)
+    map <buffer> L       <Plug>(gameoflife-load-pattern)
+<
+
+------------------------------------------------------------------------------
+HIGHLIGHTS                                     *lua-gameoflife.nvim-functions*
+
+GameOfLifeCell                                                *GameOfLifeCell*
+
+    Default: `highlight default GameOfLifeCell guifg=Black guibg=Black`
+
+
+==============================================================================
+vim:tw=78:sw=4:sts=4:ts=4:ft=help:norl:et
