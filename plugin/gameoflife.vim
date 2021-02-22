@@ -5,7 +5,7 @@ if exists('g:loaded_gameoflife')
 endif
 let g:loaded_gameoflife = 1
 
-command! -bang GameOfLifeStart lua require'gameoflife.commands'.start('0<bang>')
+command! -bang GameOfLifeStart exec "lua require'gameoflife.commands'.start(" .. <bang>0 .. ")"
 command! -nargs=1 GameOfLifeLoadPattern lua require'gameoflife.commands'.load_pattern(<q-args>)
 command! -nargs=1 GameOfLifeTimerSetStepPerSec lua require'gameoflife.commands'.set_step_per_sec(<q-args>)
 

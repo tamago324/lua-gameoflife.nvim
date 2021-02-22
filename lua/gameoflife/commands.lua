@@ -21,7 +21,7 @@ end
 
 M.start = function(load_random)
   ui.setup()
-  if load_random then
+  if load_random == 1 then
     M.load_random_board()
   end
 end
