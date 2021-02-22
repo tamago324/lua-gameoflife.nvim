@@ -61,8 +61,8 @@ local gen_random_board = function(rows, cols)
   for y = 1, rows do
     local line = {}
     for x = 1, cols do
-      -- 0 or 1
-      table.insert(line, math.random(2) - 1)
+      -- 3 : 7 の割合
+      table.insert(line, (math.random(10) < 4 and 1) or 0)
     end
     table.insert(res, line)
   end
