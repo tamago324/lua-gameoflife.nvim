@@ -74,8 +74,8 @@ MAPPINGS                                        *lua-gameoflife.nvim-mappings*
 
 Default mappings:                               *gameoflife-default-mappings*
 >
-    map <buffer> <Left>  <Plug>(gameoflife-next)
-    map <buffer> <Right> <Plug>(gameoflife-prev)
+    map <buffer> <Right> <Plug>(gameoflife-next)
+    map <buffer> <Left>  <Plug>(gameoflife-prev)
     map <buffer> <Up>    <Plug>(gameoflife-spped-up)
     map <buffer> <Down>  <Plug>(gameoflife-spped-down)
     map <buffer> S       <Plug>(gameoflife-timer-start)

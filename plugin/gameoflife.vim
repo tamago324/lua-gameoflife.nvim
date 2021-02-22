@@ -21,8 +21,8 @@ function! s:mappings() abort
   nnoremap <buffer> <Plug>(gameoflife-load-random-board) <Cmd>lua require'gameoflife.commands'.load_random_board()<CR>
   nnoremap <buffer> <Plug>(gameoflife-load-pattern)      :<C-u>GameOfLifeLoadPattern 
 
-  map <buffer> <Left>  <Plug>(gameoflife-next)
-  map <buffer> <Right> <Plug>(gameoflife-prev)
+  map <buffer> <Right>  <Plug>(gameoflife-next)
+  map <buffer> <Left> <Plug>(gameoflife-prev)
   map <buffer> <Up>    <Plug>(gameoflife-spped-up)
   map <buffer> <Down>  <Plug>(gameoflife-spped-down)
   map <buffer> S       <Plug>(gameoflife-timer-start)
