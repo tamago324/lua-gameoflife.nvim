@@ -34,8 +34,8 @@ local init = function(board)
       cols = #board[1]
     },
     generation = 1,
-    -- 各世代ごとのboardを格納
-    boards = {}
+    -- 各世代ごとのboardのRLEのテキストを格納
+    rle_boards = {}
   }
   main._set_context(ctx)
   timer.reset()

@@ -35,6 +35,7 @@ end
 ---@return table board_line baord の行のtable
 local convert_board_line = function(decoded_line, cols)
   local res = {}
+  cols = cols or #decoded_line
 
   local line = decoded_line
   -- もし、桁数が足りなければ、dead で補う
@@ -50,7 +51,29 @@ local convert_board_line = function(decoded_line, cols)
   return res
 end
 
-local to_board = function(text)
+--- RLE のテキストから、boardを生成
+---@param rle_text string
+---@return table
+local rle2board = function(rle_text, x)
+  local board = {}
+  -- rle_text をデコードする
+  -- $ もエンコードされた文字に含める
+  --   2$ は $$ になるため
+  local decoded = decode(rle_text)
+  -- 2bo$ や 2$ や 2o! とかを取得する
+  for line in string.gmatch(decoded, '([^$!]*[$!])') do
+    -- 末尾の $ と ! を削除する
+    line = string.sub(line, 1, #line-1)
+    table.insert(board, convert_board_line(line, x))
+  end
+
+  return board
+end
+
+--- RLEのパターンから、boardを生成
+---@param text string
+---@return table
+local pattern2board = function(text)
   local lines = vim.split(text, '\n')
 
   -- コメントをスキップ
@@ -69,20 +92,7 @@ local to_board = function(text)
       rle_text = rle_text .. line
     end
   end
-
-  local board = {}
-  -- rle_text をデコードする
-  -- $ もエンコードされた文字に含める
-  --   2$ は $$ になるため
-  local decoded = decode(rle_text)
-  -- 2bo$ や 2$ や 2o! とかを取得する
-  for line in string.gmatch(decoded, '([^$!]*[$!]?)') do
-    -- 末尾の $ と ! を削除する
-    line = string.sub(line, 1, #line-1)
-    table.insert(board, convert_board_line(line, x))
-  end
-
-  return board
+  return rle2board(rle_text, x)
 end
 
 --- dead のセルで囲んだ baord を返す
@@ -146,7 +156,55 @@ end
 ---@return table board
 M.gen_board_from_pattern_text = function(pattern_text, margin)
   margin = margin or 15
-  return wrap_dead_cells(to_board(pattern_text), margin)
+  return wrap_dead_cells(pattern2board(pattern_text), margin)
+end
+
+M.gen_board_from_rle_text = function(rle_text)
+  return rle2board(rle_text)
+end
+
+
+---
+---@param board table
+---@return string rle_encoded_text
+M.encode = function(board)
+  -- まずは 0 と 1 のtableを bo$! のいずれかの文字列にする
+  local list = {}
+  for row = 1, #board do
+    for col = 1, #board[row] do
+      local c = (board[row][col] == 0 and 'b') or 'o'
+      table.insert(list, c)
+    end
+    table.insert(list, '$')
+  end
+  -- 最後の $ を取り除く
+  table.remove(list, #list)
+  table.insert(list, '!')
+
+  local result = ''
+  local save_c = ''
+  local cnt = 0
+
+  for _, c in ipairs(list) do
+    if save_c == c then
+      cnt = cnt + 1
+    else
+      if save_c ~= '' then
+        if cnt == 1 then
+          result = result .. save_c
+        else
+          result = result .. tostring(cnt) .. save_c
+        end
+      end
+      -- リセット
+      cnt = 1
+    end
+    save_c = c
+  end
+
+  -- 最後は、必ず '!' だから、これでOK
+  result = result .. save_c
+  return result
 end
 
 

@@ -2,6 +2,7 @@ local a = vim.api
 
 local ui = require'gameoflife.ui'
 local STATE = require'gameoflife.const'.STATE
+local rle = require'gameoflife.rle'
 
 local M = {}
 
@@ -108,7 +109,9 @@ M._next = function()
     M.timer_stop()
     return
   end
-  _ctx.boards[_ctx.generation] = vim.deepcopy(_ctx.board)
+
+  -- RLE 形式に変換
+  _ctx.rle_boards[_ctx.generation] = rle.encode(_ctx.board)
   _ctx.board = next_generation()
   _ctx.generation = _ctx.generation + 1
   ui.redraw(_ctx.board)
@@ -120,7 +123,7 @@ M._prev = function()
     return
   end
   _ctx.generation = _ctx.generation - 1
-  _ctx.board = _ctx.boards[_ctx.generation]
+  _ctx.board = rle.gen_board_from_rle_text(_ctx.rle_boards[_ctx.generation])
   ui.redraw(_ctx.board)
   a.nvim_echo({{_ctx.generation .. '世代目', 'Normal'}}, false, {})
 end
