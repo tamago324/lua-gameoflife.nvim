@@ -20,13 +20,13 @@ local M = {}
 ---@param line string RLEでエンコードされたテキスト
 ---@return string デコードしたテキスト
 local decode = function(line)
-  local ret = ''
+  local ret = {}
   -- キャプチャしつつ、ループできる
   for len, c in string.gmatch(line, '(%d*)(.)') do
     len = (len == '' and 1) or len
-    ret = ret .. string.rep(c, len)
+    table.insert(ret, string.rep(c, len))
   end
-  return ret
+  return table.concat(res)
 end
 
 ---
@@ -82,17 +82,17 @@ local pattern2board = function(text)
   end, lines)
 
   local x, y = nil, nil
-  local rle_text = ''
+  local rle_text_tbl = {}
   for _, line in ipairs(lines) do
     if x == nil then
       -- 最初の行
       x, y = string.match(line, '^x = (%d+), y = (%d+)')
     else
       -- 2行目以降は、行をつなげる
-      rle_text = rle_text .. line
+      table.insert(rle_text_tbl, line)
     end
   end
-  return rle2board(rle_text, x)
+  return rle2board(table.concat(rle_text_tbl), x)
 end
 
 --- dead のセルで囲んだ baord を返す
@@ -181,7 +181,7 @@ M.encode = function(board)
   table.remove(list, #list)
   table.insert(list, '!')
 
-  local result = ''
+  local result = {}
   local save_c = ''
   local cnt = 0
 
@@ -190,11 +190,10 @@ M.encode = function(board)
       cnt = cnt + 1
     else
       if save_c ~= '' then
-        if cnt == 1 then
-          result = result .. save_c
-        else
-          result = result .. tostring(cnt) .. save_c
+        if cnt ~= 1 then
+          table.insert(result, tostring(cnt))
         end
+        table.insert(result, save_c)
       end
       -- リセット
       cnt = 1
@@ -203,8 +202,8 @@ M.encode = function(board)
   end
 
   -- 最後は、必ず '!' だから、これでOK
-  result = result .. save_c
-  return result
+  table.insert(result, save_c)
+  return table.concat(result)
 end
 
 
