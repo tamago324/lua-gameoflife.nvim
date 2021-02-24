@@ -72,28 +72,28 @@ local next_generation = function()
   return res
 end
 
---- ゲームが終わったか？
----@param use_limit boolean 世代の上限を使うか？
----@return boolean
-local is_end_game = function(use_limit)
-  use_limit = vim.F.if_nil(use_limit, true)
-  if use_limit then
-    if _ctx.generation > MAX_GENERATION then
-      return true
-    end
-  end
-
-  -- 生きているセルがなくなれば、終わり
-  for row = 1, #_ctx.board do
-    for col = 1, #_ctx.board[row] do
-      if _ctx.board[row][col] == STATE.LIVE then
-        return false
-      end
-    end
-  end
-
-  return true
-end
+-- --- ゲームが終わったか？
+-- ---@param use_limit boolean 世代の上限を使うか？
+-- ---@return boolean
+-- local is_end_game = function(use_limit)
+--   use_limit = vim.F.if_nil(use_limit, true)
+--   if use_limit then
+--     if _ctx.generation > MAX_GENERATION then
+--       return true
+--     end
+--   end
+--
+--   -- 生きているセルがなくなれば、終わり
+--   for row = 1, #_ctx.board do
+--     for col = 1, #_ctx.board[row] do
+--       if _ctx.board[row][col] == STATE.LIVE then
+--         return false
+--       end
+--     end
+--   end
+--
+--   return true
+-- end
 
 M._set_context = function(context)
   _ctx = context
@@ -104,11 +104,11 @@ M._get_context = function()
 end
 
 M._next = function()
-  if is_end_game(false) then
-    vim.api.nvim_echo({{'Finished', 'WarningMsg'}}, false, {})
-    M.timer_stop()
-    return
-  end
+  -- if is_end_game(false) then
+  --   vim.api.nvim_echo({{'Finished', 'WarningMsg'}}, false, {})
+  --   M.timer_stop()
+  --   return
+  -- end
 
   -- RLE 形式に変換
   _ctx.rle_boards[_ctx.generation] = rle.encode(_ctx.board)
